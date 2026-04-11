@@ -530,16 +530,12 @@ body.fade-to-marketplace::before {
       align-items: center;
     }
 
-    .preview-image {
-      max-width: 100%;
-      max-height: 400px;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #0f1720;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+.preview-image video {
+  max-width: 100%;
+  max-height: 400px; /* Matches your .multiple-images max-height */
+  object-fit: contain;
+  border-radius: 12px;
+}
 
     .preview-image img {
       max-width: 100%;
@@ -590,7 +586,7 @@ body.fade-to-marketplace::before {
         transform: translateY(0) scale(1);
       }
     }
-
+    
     #head1, #head2, #head3, #head4, #head5 {
       opacity: 0;
       position: absolute;
@@ -746,7 +742,7 @@ btn.addEventListener('click', () => {
         description: 'A specialized utility that fixes and patches greyed out or bugged Kernel Stack Protection and Memory Integrity settings. If your hardware is compatible but Windows is blocking your access, this tool bypasses the restrictions to force-enable',
         thumb: 'https://raw.githubusercontent.com/AC-Storm-YT/windowssecuritypatcher/refs/heads/main/icon.png',
         previewImages: [
-          'https://raw.githubusercontent.com/AC-Storm-YT/codegalaxy.github.io/refs/heads/main/preview/wsp/wsp_preview1.png',
+          'https://github.com/AC-Storm-YT/codegalaxy.github.io/raw/refs/heads/main/preview/wsp/wsp_video1.mp4',
           'https://raw.githubusercontent.com/AC-Storm-YT/codegalaxy.github.io/refs/heads/main/preview/wsp/wsp_preview2.png'
         ],
         versionUrl: 'https://raw.githubusercontent.com/AC-Storm-YT/windowssecuritypatcher/refs/heads/main/version.txt',
@@ -906,9 +902,12 @@ btn.addEventListener('click', () => {
       modalOverlay.style.display = 'flex';
     }
 
-    function showPreview(app) {
-      const images = app.previewImages || [app.thumb];
-      const isSingleImage = images.length === 1;
+function showPreview(app) {
+      const assets = app.previewImages || [app.thumb];
+      const isSingle = assets.length === 1;
+
+      // Helper to check if the link is a video
+      const isVideo = (url) => url.toLowerCase().endsWith('.mp4') || url.toLowerCase().endsWith('.mov');
 
       previewContent.innerHTML = `
         <div class="preview-header">
@@ -917,16 +916,22 @@ btn.addEventListener('click', () => {
         </div>
         <div class="preview-body">
           <div class="preview-gallery">
-            ${isSingleImage ? `
+            ${isSingle ? `
               <div class="preview-image single-image">
-                <img src="${images[0]}" alt="Preview image 1">
+                ${isVideo(assets[0]) ? 
+                  `<video autoplay muted loop playsinline><source src="${assets[0]}" type="video/mp4"></video>` : 
+                  `<img src="${assets[0]}" alt="Preview 1">`
+                }
               </div>
             ` : `
               <div class="scroll-container">
                 <div class="preview-gallery">
-                  ${images.map((img, index) => `
+                  ${assets.map((url, index) => `
                     <div class="preview-image multiple-images">
-                      <img src="${img}" alt="Preview image ${index + 1}">
+                      ${isVideo(url) ? 
+                        `<video autoplay muted loop playsinline><source src="${url}" type="video/mp4"></video>` : 
+                        `<img src="${url}" alt="Preview ${index + 1}">`
+                      }
                     </div>
                   `).join('')}
                 </div>
