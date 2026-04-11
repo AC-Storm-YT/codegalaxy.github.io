@@ -15,8 +15,7 @@
       --radius: 14px;
       color-scheme: dark;
     }
-
-    /* Body & stars */
+    
     html, body {
       font-family: 'Inter', sans-serif;
       margin: 0;
@@ -43,7 +42,7 @@ body::before {
   background: radial-gradient(#213b60, #10171f);
   opacity: 0;
   pointer-events: none;
-  z-index: 0; /* Put it above background but below stars */
+  z-index: 0;
   transition: opacity 1.5s ease-in-out;
 }
 
@@ -63,7 +62,7 @@ body.fade-to-marketplace::before {
   left: 0px;
   right: 0px;
   margin: auto;
-  z-index: 1; /* Add this to put stars above the overlay */
+  z-index: 1;
 }
 
     .x1{ animation: floatUp 4s infinite linear; transform: scale(1.0); }
@@ -86,7 +85,6 @@ body.fade-to-marketplace::before {
     
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Intro */
     #intro {
   position: absolute;
   inset: 0;
@@ -94,7 +92,7 @@ body.fade-to-marketplace::before {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 10; /* Higher than overlay */
+  z-index: 10;
       transition: opacity 1s ease, filter 1s ease;
       text-align: center;
     }
@@ -153,13 +151,12 @@ body.fade-to-marketplace::before {
       box-shadow: 0 0 30px rgba(124, 92, 255, 0.6);
     }
 
-    /* Main Marketplace */
     #main {
   opacity: 0;
   pointer-events: none;
   transition: opacity 1s ease;
   position: relative;
-  z-index: 10; /* Higher than overlay */
+  z-index: 10;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -207,7 +204,6 @@ body.fade-to-marketplace::before {
       padding: 18px;
     }
 
-    /* Footer */
     footer {
       margin-top: 0;
       color: var(--muted);
@@ -216,7 +212,6 @@ body.fade-to-marketplace::before {
       padding: 18px;
     }
 
-    /* Marketplace Cards */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -280,7 +275,6 @@ body.fade-to-marketplace::before {
       color: white;
     }
 
-    /* NEW MODAL DESIGN */
     #modalOverlay {
       position: fixed;
       top: 0;
@@ -458,7 +452,6 @@ body.fade-to-marketplace::before {
       background: rgba(255, 255, 255, 0.15);
     }
 
-    /* Preview Gallery Modal */
     #previewOverlay {
       position: fixed;
       top: 0;
@@ -598,7 +591,6 @@ body.fade-to-marketplace::before {
       }
     }
 
-    /* Header animations */
     #head1, #head2, #head3, #head4, #head5 {
       opacity: 0;
       position: absolute;
@@ -704,13 +696,8 @@ const main = document.getElementById('main');
 const colorFadeOverlay = document.getElementById('colorFadeOverlay');
 
 btn.addEventListener('click', () => {
-  // Add color fade to button
   btn.classList.add('fade-color');
-  
-  // Add fade class to body (this triggers the ::before pseudo-element)
   document.body.classList.add('fade-to-marketplace');
-  
-  // Fade out intro and fade in main
   setTimeout(() => {
     intro.classList.add('fade-out');
   }, 500);
@@ -871,7 +858,6 @@ btn.addEventListener('click', () => {
         </div>
       `;
 
-      // Load version info
       const versionPill = modalContent.querySelector('.version-pill');
       if (app.version) {
         versionPill.textContent = 'v' + app.version;
@@ -883,46 +869,36 @@ btn.addEventListener('click', () => {
         });
       }
 
-      // Set up event listeners
       modalContent.querySelector('.modal-close').addEventListener('click', closeModal);
       
       modalContent.querySelector('.modal-download').addEventListener('click', async () => {
         const price = app.price ? app.price.toUpperCase() : 'PRIVATE';
-        
-        // Check if app is private
         if (price === 'PRIVATE') {
           const userCode = prompt('Enter the download code:');
-          if (!userCode) return; // cancelled or empty
+          if (!userCode) return;
 
-          // Hash the entered code using SHA-256
           const encoder = new TextEncoder();
           const data = encoder.encode(userCode.trim());
           const hashBuffer = await crypto.subtle.digest('SHA-256', data);
           const hashArray = Array.from(new Uint8Array(hashBuffer));
           const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-          // Compare with the stored hash (precomputed SHA-256 hash of "StormKey2025")
           const correctHash = '0cafa1367e860ac2c1277972b8e9bbf47096a32caefcffc00b69bcc351a5de18';
 
           if (hashHex === correctHash) {
-            // Decode the Base64 download link before opening
             const realLink = atob(app.download);
             window.open(realLink, '_blank');
           } else {
             alert('Incorrect code.');
           }
         } else {
-          // Free or paid apps open directly
           window.open(app.download, '_blank');
         }
       });
 
-      // Preview button event listener
       modalContent.querySelector('.modal-preview').addEventListener('click', () => {
         showPreview(app);
       });
 
-      // Close modal when clicking outside
       modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) closeModal();
       });
@@ -960,7 +936,6 @@ btn.addEventListener('click', () => {
         </div>
       `;
 
-      // Set up event listeners for preview modal
       previewContent.querySelector('.preview-close').addEventListener('click', closePreview);
       
       previewOverlay.addEventListener('click', (e) => {
@@ -986,7 +961,6 @@ btn.addEventListener('click', () => {
       modalOverlay.style.display = 'none';
     }
 
-    // Render app cards
     appsData.forEach(app => appsGrid.appendChild(renderCard(app)));
   </script>
 </body>
