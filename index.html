@@ -401,6 +401,11 @@ body.fade-to-marketplace::before {
       color: rgb(211, 32, 53);
     }
 
+        .modal-pill.price-canceled {
+      background: rgba(211, 133, 32, 0.15);
+      color: rgb(211, 133, 32);
+    }
+
     .modal-languages {
       font-size: 14px;
       color: var(--muted);
@@ -773,11 +778,10 @@ btn.addEventListener('click', () => {
         description: 'Windows ISO lets you quickly download official Windows ISO files without searching the web.',
         thumb: 'https://raw.githubusercontent.com/AC-Storm-YT/Windows_iso/refs/heads/main/icon.svg',
         previewImages: [
-          'https://github.com/AC-Storm-YT/codegalaxy.github.io/blob/main/preview/windowsiso/windowsiso_preview1.png?raw=true'
         ],
         versionUrl: 'https://raw.githubusercontent.com/AC-Storm-YT/Windows_iso/refs/heads/main/version.txt',
         size: '506 KB',
-        price: 'Private',
+        price: 'Canceled',
         download: 'aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vc2NsL2ZpL2wyZ3B5ZXR6dmlkdDZta28wa3FtZi9XaW5kb3dzX0lTTy56aXA/cmxrZXk9NGNoOW83a2xwdGd6aHNkczhtdnZjMnZwaCZzdD0wcDk0OGZpYSZkbD0x',
         languages: ['English'] 
       },
@@ -959,6 +963,7 @@ function showPreview(app) {
       const upperPrice = price.toUpperCase();
       if (upperPrice === 'FREE') return 'price-free';
       if (upperPrice === 'PRIVATE') return 'price-private';
+      if (upperPrice === 'CANCELED') return 'price-canceled';
       return 'price-paid';
     }
 
