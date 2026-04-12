@@ -871,8 +871,17 @@ btn.addEventListener('click', () => {
 
       modalContent.querySelector('.modal-close').addEventListener('click', closeModal);
       
+// Single consolidated Download Listener
       modalContent.querySelector('.modal-download').addEventListener('click', async () => {
         const price = app.price ? app.price.toUpperCase() : 'PRIVATE';
+
+        // 1. Handle Canceled apps
+        if (price === 'CANCELED') {
+          alert('No download available');
+          return;
+        }
+
+        // 2. Handle Private apps (requires code)
         if (price === 'PRIVATE') {
           const userCode = prompt('Enter the download code:');
           if (!userCode) return;
@@ -890,7 +899,9 @@ btn.addEventListener('click', () => {
           } else {
             alert('Incorrect code.');
           }
-        } else {
+        } 
+        // 3. Handle Free/Paid apps (direct download)
+        else {
           window.open(app.download, '_blank');
         }
       });
